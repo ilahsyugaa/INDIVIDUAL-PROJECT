@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Note taking page</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="custom-class">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">NoteRush</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Add Note</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="home.html">Home</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container my-3">
+        <h1>Add Your Note</h1>
+        <div id="notes" class="row container-fluid"></div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Add Note</h5>
+                <input type="text" class="form-control my-2" id="titleTxt" placeholder="Add Title">
+                <div class="form-group">
+                    <textarea class="form-control" id="addTxt" rows="3" placeholder="Add Note"></textarea>
+                </div>
+                <button class="btn btn-primary" id="addBtn">Add Note</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBM-zN2iyE8edFyomm8nP30ZRYvXNIOWKU",
+            authDomain: "noterush-626ab.firebaseapp.com",
+            projectId: "noterush-626ab",
+            storageBucket: "noterush-626ab.appspot.com",
+            messagingSenderId: "1046798676169",
+            appId: "1:1046798676169:web:91b21bb116298e01679d18",
+            measurementId: "G-6F5VQX9234"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.getElementById("addBtn").addEventListener("click", async () => {
+            const title = document.getElementById("titleTxt").value;
+            const note = document.getElementById("addTxt").value;
+            const date = new Date().toLocaleString();
+
+            if (title && note) {
+                try {
+                    await addDoc(collection(db, "notes"), {
+                        title: title,
+                        note: note,
+                        date: date,
+                        timestamp: serverTimestamp()
+                    });
+                    alert("Note added successfully!");
+                    document.getElementById("titleTxt").value = "";
+                    document.getElementById("addTxt").value = "";
+                } catch (error) {
+                    console.error("Error adding note: ", error);
+                    alert("Error adding note. Please try again.");
+                }
+            } else {
+                alert("Please add a title and note.");
+            }
+        });
+        
+    </script>
+</body>
+
+</html>

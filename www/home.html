@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">NoteRush</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Add Note</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="home.html">Home</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" id="searchTxt" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" id="searchBtn" type="button">Search</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container my-3">
+        <h1>Your Notes</h1>
+        <div id="notes" class="row container-fluid"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, getDocs, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBM-zN2iyE8edFyomm8nP30ZRYvXNIOWKU",
+            authDomain: "noterush-626ab.firebaseapp.com",
+            projectId: "noterush-626ab",
+            storageBucket: "noterush-626ab.appspot.com",
+            messagingSenderId: "1046798676169",
+            appId: "1:1046798676169:web:91b21bb116298e01679d18",
+            measurementId: "G-6F5VQX9234"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function displayNotes(filter = "") {
+            const notesListElm = document.getElementById("notes");
+            notesListElm.innerHTML = "";
+            const notesQuery = filter ? query(collection(db, "notes"), where("title", ">=", filter), where("title", "<=", filter + "\uf8ff")) : collection(db, "notes");
+            const querySnapshot = await getDocs(notesQuery);
+            querySnapshot.forEach(doc => {
+                const note = doc.data();
+                notesListElm.innerHTML += `
+                    <div class="noteCard my-2 mx-2 card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title font-weight-bold">${note.title}</h5>
+                            <p class="card-text">${note.note}</p>
+                            <p class="card-text"><small class="text-muted">${note.date}</small></p>
+                            <button class="btn btn-danger" onclick="deleteNote('${doc.id}')">Delete Note</button>
+                            <button class="btn btn-primary" onclick="editNotePage('${doc.id}')">Edit Note</button>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        document.getElementById("searchBtn").addEventListener("click", () => {
+            const searchTxt = document.getElementById("searchTxt").value;
+            displayNotes(searchTxt);
+        });
+
+        window.deleteNote = async function(noteId) {
+            try {
+                await deleteDoc(doc(db, "notes", noteId));
+                alert("Note deleted successfully!");
+                displayNotes();
+            } catch (error) {
+                console.error("Error deleting note: ", error);
+                alert("Error deleting note. Please try again.");
+            }
+        }
+
+        window.editNotePage = function(noteId) {
+            window.location.href = `edit.html?id=${noteId}`;
+        }
+
+        displayNotes();
+    </script>
+</body>
+
+</html>

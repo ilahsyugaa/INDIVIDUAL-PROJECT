@@ -1,0 +1,87 @@
+/* Navbar */
+.navbar {
+    background-color: #95A8AD; /* Dark background */
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    color: #ffffff;
+}
+
+/* Container */
+.container {
+    background-color: #f4e9e6; /* Light background color */
+    color: #95A8AD; /* Text color */
+    max-width: 800px; /* Adjust maximum width for content */
+    margin: auto;
+    margin-top: 20px; /* Add margin at the top */
+}
+
+/* Card */
+.card {
+    background-color: #ffffff; /* Card background color */
+    color: #343a40;
+    margin-bottom: 20px; /* Space between cards */
+}
+
+.card-body {
+    background-color: #d5baaf; /* Card body background color */
+}
+
+/* Note Cards */
+.noteCard {
+    width: calc(100% - 20px);
+    margin-bottom: 20px; /* Adjust card width */
+    margin: 10px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+@media (min-width: 576px) {
+    .noteCard {
+        width: calc(50% - 20px); /* Two cards per row on small screens */
+    }
+}
+
+@media (min-width: 768px) {
+    .noteCard {
+        width: calc(33.33% - 20px); /* Three cards per row on medium screens */
+    }
+}
+
+@media (min-width: 992px) {
+    .noteCard {
+        width: calc(25% - 20px); /* Four cards per row on large screens */
+    }
+}
+
+/* Form Controls */
+.form-control {
+    margin-bottom: 10px;
+    background-color: #ffffff; /* Input background color */
+    color: #495057; /* Input text color */
+    border-color: #ced4da; /* Space between form controls */
+}
+
+/* Buttons */
+.btn {
+    background-color: #648a95; /* Button background color */
+    color: #ffffff;
+    margin-right: 10px; /* Space between buttons */
+}
+
+.btn-primary {
+    background-color: #648a95; /* Primary button color */
+    border-color: #648a95; /* Primary button border color */
+    color: #ffffff; /* Button text color */
+}
+
+.btn-danger {
+    background-color: #98756e; /* Danger button background color */
+    border-color: #98756e; /* Danger button border color */
+}
+
+.btn-success {
+    background-color: #549376; /* Success button background color */
+    border-color: #549376; /* Success button border color */
+}
